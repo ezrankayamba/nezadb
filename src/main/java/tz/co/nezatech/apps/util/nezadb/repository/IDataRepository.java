@@ -2,6 +2,8 @@ package tz.co.nezatech.apps.util.nezadb.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,6 +37,8 @@ public interface IDataRepository<T extends Object> {
 	public Status update(T entity);
 
 	public Status delete(long id);
+	
+	public Status deleteLinked(long id);
 
 	public String sqlFindAll();
 
@@ -47,6 +51,7 @@ public interface IDataRepository<T extends Object> {
 	public PreparedStatement psUpdateByKey(T entity, Connection conn);
 
 	public PreparedStatement psDelete(long id, Connection conn);
+	public PreparedStatement psDeleteLinked(long id, Connection conn);
 
 	public JdbcTemplate getJdbcTemplate();
 
@@ -57,4 +62,6 @@ public interface IDataRepository<T extends Object> {
 	public Status onSave(T entity, Status status);
 
 	public List<T> onList(List<T> list);
+	public Date fromSQLTimestamp(Timestamp timestamp);
+	public Timestamp toSQLTimestamp(Date date);
 }

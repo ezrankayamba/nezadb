@@ -5,6 +5,8 @@ import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -106,7 +108,7 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 				}
 			});
 			status = res == 1 ? new Status(200, "Successfully updated entity " + entity)
-					: new Status(500, "Failed to update role " + entity + ". Error msg: No role created");
+					: new Status(500, "Failed to update entity " + entity + ". Error msg: No entity updated");
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new Status(500, "Failed to update entity " + entity + ". Error msg: " + e.getMessage());
@@ -131,7 +133,7 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 				}
 			});
 			status = res == 1 ? new Status(200, "Successfully updated entity " + entity)
-					: new Status(500, "Failed to update role " + entity + ". Error msg: No role created");
+					: new Status(500, "Failed to update entity " + entity + ". Error msg: No entity updated");
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new Status(500, "Failed to update entity " + entity + ". Error msg: " + e.getMessage());
@@ -147,7 +149,6 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 	@Override
 	public PreparedStatement psUpdateByKey(T entity, Connection conn) {
 		PreparedStatement ps = psUpdate(entity, conn);
-
 		return ps;
 	}
 
@@ -166,6 +167,24 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return new Status(500, "Failed to delete entity " + id + ". Error msg: " + e.getMessage());
+		}
+	}
+	
+	@Override
+	public Status deleteLinked(final long id) {
+		try {
+			int res = getJdbcTemplate().update(new PreparedStatementCreator() {
+
+				@Override
+				public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+					return psDeleteLinked(id, conn);
+				}
+			});
+			return res >= 1 ? new Status(200, "Successfully deleted entities linked to " + id)
+					: new Status(500, "Failed to delete entities linked to " + id + ". Error msg: No entity deleted");
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return new Status(500, "Failed to delete entities linked to " + id + ". Error msg: " + e.getMessage());
 		}
 	}
 
@@ -194,4 +213,19 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 		return list;
 	}
 
+	@Override
+	public Timestamp toSQLTimestamp(Date date) {
+		Timestamp tsp = null;
+		if (date != null)
+			tsp = new Timestamp(date.getTime());
+		return tsp;
+	}
+
+	@Override
+	public Date fromSQLTimestamp(Timestamp timestamp) {
+		Date date = null;
+		if (timestamp != null)
+			date = new Date(timestamp.getTime());
+		return date;
+	}
 }
