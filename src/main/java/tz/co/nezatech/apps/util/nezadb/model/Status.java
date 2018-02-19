@@ -3,7 +3,7 @@ package tz.co.nezatech.apps.util.nezadb.model;
 public class Status {
 	private int code;
 	private String message;
-	private int generatedId;
+	private long generatedId;
 	private boolean success = false;
 
 	public Status(int code, String message) {
@@ -18,11 +18,11 @@ public class Status {
 		this.success = code == 200;
 	}
 
-	public int getGeneratedId() {
+	public long getGeneratedId() {
 		return generatedId;
 	}
 
-	public void setGeneratedId(int generatedId) {
+	public void setGeneratedId(long generatedId) {
 		this.generatedId = generatedId;
 	}
 
