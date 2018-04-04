@@ -4,7 +4,7 @@ package tz.co.nezatech.apps.util.nezadb;
  * Hello world!
  *
  */
-public class App 
+public class TestApp 
 {
     public static void main( String[] args )
     {
