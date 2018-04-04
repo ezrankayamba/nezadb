@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -30,19 +32,16 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 	@Override
 	public List<T> getAll() {
 		String sql = sqlFindAll() + (orderBy == null ? "" : orderBy);
-		System.out.println("Sql: " + sql);
 		return onList(getJdbcTemplate().query(sql, getRowMapper()));
 	}
 
 	public List<T> getAll(String column, Object value) {
 		String sql = sqlFindAll() + " and " + column + "='" + value + "'";
-		System.out.println("Sql: " + sql);
 		return onList(getJdbcTemplate().query(sql + (orderBy == null ? "" : orderBy), getRowMapper()));
 	}
 
 	public List<T> getAllNullable(String column, Boolean whereNull) {
 		String sql = sqlFindAll() + " and " + column + (whereNull ? " is null " : "is not null");
-		System.out.println("Sql: " + sql);
 		return onList(getJdbcTemplate().query(sql + (orderBy == null ? "" : orderBy), getRowMapper()));
 	}
 
@@ -55,6 +54,20 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 				return searchCriteria(value, conn);
 			}
 		}, getRowMapper()));
+	}
+	@Override
+	public List<T> search(final Map<String, Object> searchFileters) {
+		return onList(getJdbcTemplate().query(new PreparedStatementCreator() {
+
+			@Override
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				return searchCriteria(searchFileters, conn);
+			}
+		}, getRowMapper()));
+	}
+	@Override
+	public List<T> search(final List<NamedQueryParam> params) {
+		return null;		
 	}
 
 	public Status create(final T entity) {
@@ -227,5 +240,17 @@ public abstract class BaseDataRepository<T> implements IDataRepository<T> {
 		if (timestamp != null)
 			date = new Date(timestamp.getTime());
 		return date;
+	}
+	
+	
+
+	@Override
+	public PreparedStatement searchCriteria(Map<String, Object> searchFileters, Connection conn) {
+		throw new UnsupportedOperationException("NamedParameterJdbcTemplate Not supported by this repository. Consider implementing this");
+	}
+
+	@Override
+	public NamedParameterJdbcTemplate getNamedParamsJdbcTemplate() {
+		throw new UnsupportedOperationException("NamedParameterJdbcTemplate Not supported by this repository. Consider implementing this");
 	}
 }

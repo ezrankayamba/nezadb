@@ -4,7 +4,6 @@ public class Status {
 	private int code;
 	private String message;
 	private long generatedId;
-	private boolean success = false;
 
 	public Status(int code, String message) {
 		this(code, message, 0);
@@ -15,7 +14,6 @@ public class Status {
 		this.code = code;
 		this.message = message;
 		this.generatedId = generatedId;
-		this.success = code == 200;
 	}
 
 	public long getGeneratedId() {
@@ -43,11 +41,6 @@ public class Status {
 	}
 
 	public boolean isSuccess() {
-		return success;
+		return getCode()==200;
 	}
-
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
-
 }
