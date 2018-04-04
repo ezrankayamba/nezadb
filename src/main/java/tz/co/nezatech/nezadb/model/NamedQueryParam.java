@@ -1,4 +1,4 @@
-package tz.co.nezatech.apps.util.nezadb.model;
+package tz.co.nezatech.nezadb.model;
 
 public class NamedQueryParam {
 	public enum Operator {

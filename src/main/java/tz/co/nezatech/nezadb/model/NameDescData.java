@@ -1,4 +1,4 @@
-package tz.co.nezatech.apps.util.nezadb.model;
+package tz.co.nezatech.nezadb.model;
 
 public class NameDescData implements IData {
 	String name;
