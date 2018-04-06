@@ -11,7 +11,6 @@ import java.util.Map;
 import tz.co.nezatech.nezadb.model.IData;
 import tz.co.nezatech.nezadb.model.NamedQueryParam;
 
-
 /**
  * 
  * @author nkayamba
@@ -21,22 +20,35 @@ import tz.co.nezatech.nezadb.model.NamedQueryParam;
  * 
  *
  */
-public interface IDataRepository<PK extends Object, T extends IData> {
-	public IDataRepository<PK, T> getlistener();
+public interface IDataRepository<PK, T extends IData> {
 
-	public void create(T e);
+	public T create(T e);
 
-	public void create(List<T> list);
+	default public void create(List<T> list) {
+		throw new UnsupportedOperationException("method create-list not yet supported");
+	}
 
-	public void update(T e);
+	public T update(T e);
 
-	public void update(List<T> list);
+	default public void update(List<T> list) {
+		throw new UnsupportedOperationException("method update-list not yet supported");
+	}
 
-	public void delete(T e);
+	default public <RT extends Object> RT execute(Object... anyParams) {
+		throw new UnsupportedOperationException("method update-list not yet supported");
+	}
 
-	public void delete(List<T> list);
+	public void delete(PK id);
 
-	public List<T> query(List<NamedQueryParam> filters);
+	default public void delete(List<T> list) {
+		throw new UnsupportedOperationException("method delete-list not yet supported");
+	}
+
+	default public List<T> query(List<NamedQueryParam> filters) {
+		throw new UnsupportedOperationException("method query-list-namedqueryparams not yet supported");
+	}
+
+	public List<T> search(String lookup);
 
 	public T query(PK id);
 
@@ -49,7 +61,7 @@ public interface IDataRepository<PK extends Object, T extends IData> {
 		return String.format(Locale.ENGLISH, "SELECT * FROM %s", tableName());
 	}
 
-	default public String deleteSql(Class<T> type) {
+	default public String deleteSql() {
 		return String.format(Locale.ENGLISH, "DELETE FROM %s", tableName());
 	}
 

@@ -1,16 +1,24 @@
 package tz.co.nezatech.nezadb.model;
 
 public class NameDescData implements IData {
+	Long id;
 	String name;
-	String desciption;
+	String description;
 	
 	public NameDescData() {
 		super();
 	}
-	public NameDescData(String name, String desciption) {
+	public NameDescData(String name, String description) {
 		super();
 		this.name = name;
-		this.desciption = desciption;
+		this.description = description;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
@@ -18,10 +26,10 @@ public class NameDescData implements IData {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDesciption() {
-		return desciption;
+	public String getDescription() {
+		return description;
 	}
-	public void setDesciption(String desciption) {
-		this.desciption = desciption;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
